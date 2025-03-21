@@ -21,6 +21,9 @@ new class extends Component {
     {
         $item = Item::find($id); // Retrieve the instance
         if ($item) {
+            $item->saleInformation->delete();
+            $item->purchaseInformation->delete();
+
             $item->delete(); // Call delete() on the instance
         }
         $this->mount();
@@ -28,7 +31,7 @@ new class extends Component {
 
     public function search()
     {
-        $this->items = Item::where('name', 'LIKE', '%'.$this->search.'%')->get();
+        $this->items = Item::where('name', 'LIKE', '%' . $this->search . '%')->get();
     }
 
     public function updatedSearch()
@@ -39,7 +42,9 @@ new class extends Component {
 
 <div class="relative overflow-x-auto">
     <div class="flex m-1">
-        <a href="/items/create" class="w-1/2" wire:navigate> <flux:button>Create</flux:button></a>
+        <a href="/items/create" class="w-1/2" wire:navigate>
+            <flux:button>Create</flux:button>
+        </a>
         <flux:input class="w-2/3" wire:model.live="search" icon="magnifying-glass" placeholder="Search Items" />
     </div>
 
@@ -48,6 +53,10 @@ new class extends Component {
             <tr>
                 <th scope="col" class="px-6 py-3">ID</th>
                 <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">SKU</th>
+                {{-- <th scope="col" class="px-6 py-3">Image</th> --}}
+
+
                 <th scope="col" class="px-6 py-3">Created At</th>
                 <th scope="col" class="px-6 py-3">Updated At</th>
                 <th scope="col" class="px-6 py-3">Action</th>
@@ -59,7 +68,24 @@ new class extends Component {
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ $item->id }}
                     </th>
-                    <td class="px-6 py-4">{{ $item->name }}</td>
+                    <td class="px-6 py-4"> <a href="/items/{{ $item->id }}/show" class="text-blue-500 hover:underline" wire:navigate>{{ $item->name }}</a></td>
+                    <td class="px-6 py-4">{{ $item->sku }}</td>
+                    {{-- <td class="px-6 py-4">
+                        @foreach (json_decode($item->images) as $imagePath)
+                            <img src="{{ asset('storage/' . $imagePath) }}" alt="Saved Image"
+                                class="w-24 h-24 object-cover rounded-lg">
+                        @endforeach
+                    </td> --}}
+                    {{-- <td class="px-6 py-4">
+                        <div class="flex gap-2">
+                            @foreach (json_decode($item->images) as $imagePath)
+                                <a href="{{ asset('storage/' . $imagePath) }}" data-fancybox="gallery-{{ $item->id }}" data-caption="{{ $item->name }}">
+                                    <img src="{{ asset('storage/' . $imagePath) }}" alt="Saved Image" class="w-24 h-24 object-cover rounded-lg hover:opacity-75 transition-opacity">
+                                </a>
+                            @endforeach
+                        </div>
+                    </td> --}}
+
                     <td class="px-6 py-4">{{ $item->created_at }}</td>
                     <td class="px-6 py-4">{{ $item->updated_at }}</td>
                     <td class="px-6 py-4">
@@ -76,3 +102,8 @@ new class extends Component {
         </tbody>
     </table>
 </div>
+
+
+
+
+

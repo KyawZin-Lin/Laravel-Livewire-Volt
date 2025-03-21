@@ -38,8 +38,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
-
+        if(auth()->user()->hasRole('SuperAdmin')){
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+
+        }elseif (auth()->user()->hasRole('ShopOwner')) {
+        $this->redirectIntended(default: route('user-dashboard', absolute: false), navigate: true);
+
+        }
     }
 
     /**

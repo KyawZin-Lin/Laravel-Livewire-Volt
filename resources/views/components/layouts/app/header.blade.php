@@ -12,8 +12,12 @@
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')" wire:navigate>
+                <flux:navbar.item icon="layout-grid" href="{{ route('user-dashboard') }}" :current="request()->routeIs('user-dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
+                </flux:navbar.item>
+
+                <flux:navbar.item icon="layout-grid" href="{{ route('user-items.index') }}" :current="request()->routeIs('user-items.index')" wire:navigate>
+                    {{ __('Item') }}
                 </flux:navbar.item>
             </flux:navbar>
 
